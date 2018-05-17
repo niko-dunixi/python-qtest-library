@@ -32,7 +32,7 @@ class QTestClient:
         if not auth_token:
             if not username or not password:
                 raise Exception('You must either give an authorization token or username/password. Not neither.')
-            auth_token = self._get_bearer_token(username, password, host, site_name)
+            auth_token = QTestClient._get_bearer_token(username, password, host, site_name)
         self.auth_token = auth_token
 
     @staticmethod
@@ -228,9 +228,3 @@ class QTestClient:
         response = requests.post(url=url, headers=self._gen_header_from_token(), json=fields)
         response_json = response.json()
         return response_json
-
-
-if __name__ == '__main__':
-    client = QTestClient(username='paul.baker@wgu.edu', password='zkA9Vr503Yfi', site_name='wgu')
-    releases = client.get_releases(49099)
-    print(releases)

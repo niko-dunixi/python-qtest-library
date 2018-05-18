@@ -1,5 +1,4 @@
 import requests
-from pprint import pprint
 from base64 import b64encode
 import datetime
 
@@ -11,12 +10,16 @@ def str_to_base64(original_string):
     return encoded_string
 
 
-class naive_utc(datetime.tzinfo):
+class NaiveUTC(datetime.tzinfo):
     def tzname(self, **kwargs):
         return "UTC"
 
     def utcoffset(self, dt):
         return datetime.timedelta(0)
+
+    @staticmethod
+    def now_timestamp():
+        return datetime.datetime.utcnow().replace(tzinfo=NaiveUTC()).isoformat(sep='T', timespec='milliseconds')
 
 
 class QTestClient:
@@ -181,7 +184,7 @@ class QTestClient:
 
     def submit_test_result(self, project_id, test_run_id, test_case_dict, html_results, has_passed):
         url = self.host + '/api/v3/projects/' + str(project_id) + '/test-runs/' + str(test_run_id) + '/auto-test-logs'
-        utc_now = datetime.datetime.utcnow().replace(tzinfo=naive_utc()).isoformat(sep='T', timespec='milliseconds')
+        utc_now = NaiveUTC.now_timestamp()
         body = {
             'status': 'PASS' if has_passed else 'FAIL',
             'name': test_case_dict['name'],

@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name='QTestLibrary',
+    name='qasymphony-qtest-library',
     version='0.2.1',
     packages=['qtest'],
     license='ISC',
@@ -11,5 +11,11 @@ setup(
     ],
     author='Paul N. Baker',
     author_email='paul.nelson.baker@gmail.com',
-    url='https://github.com/paul-nelson-baker/python-qtest-library'
+    url='https://github.com/paul-nelson-baker/python-qtest-library',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Programming Language :: Python :: 3.6',
+    ],
+    keywords='qasymphony qtest quality-assurance qa'
 )

@@ -1,3 +1,4 @@
+import setuptools
 from distutils.core import setup
 
 setup(
@@ -17,5 +18,6 @@ setup(
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 3.6',
     ],
-    keywords='qasymphony qtest quality-assurance qa'
+    keywords='qasymphony qtest quality-assurance qa',
+    python_requires='~=3.6',
 )

@@ -1,6 +1,7 @@
-import requests
-from base64 import b64encode
 import datetime
+from base64 import b64encode
+
+import requests
 
 
 def str_to_base64(original_string):

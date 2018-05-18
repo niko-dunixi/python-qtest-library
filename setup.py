@@ -9,4 +9,7 @@ setup(
     install_requires=[
         'requests>=2.18.4',
     ],
+    author='Paul N. Baker',
+    author_email='paul.nelson.baker@gmail.com',
+    url='https://github.com/paul-nelson-baker/python-qtest-library'
 )

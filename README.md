@@ -2,6 +2,11 @@
 
 A client library to interact with the qTest API, which one can reference here: [api.qasymphony.com](https://api.qasymphony.com/)
 
+## Installation
+```bash
+pip install qasymphony-qtest-library
+```
+
 ## Usage
 
 ```python

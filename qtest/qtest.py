@@ -127,7 +127,10 @@ class QTestClient:
         response_json = response.json()
         return response_json
 
-    def get_test_runs(self, project_id, parent_id=None, parent_type=None, page=1, page_size=100):
+    def get_test_runs(self, project_id, parent_id=None, parent_type=None, expand=None, page=1, page_size=100):
+        """
+        Specify expand=descendants to include all Test Runs which are directly or indirectly under the container
+        """
         params = {
             'page': page,
             'pageSize': page_size
@@ -136,7 +139,19 @@ class QTestClient:
             params['parentId'] = parent_id
         if parent_type:
             params['parentType'] = parent_type
+        if expand:
+             params['expand'] = expand
         url = self.host + '/api/v3/projects/' + str(project_id) + '/test-runs'
+        response = requests.get(url, params=params, headers=self._gen_header_from_token())
+        return response.json()
+    
+    def get_test_runs_subhierarchy(self, project_id, parent_id=None, parent_type=None):
+        params = {}
+        if parent_id:
+            params['parentId'] = parent_id
+        if parent_type:
+            params['parentType'] = parent_type
+        url = self.host + '/api/v3/projects/' + str(project_id) + '/test-runs/subhierarchy'
         response = requests.get(url, params=params, headers=self._gen_header_from_token())
         return response.json()
 
@@ -159,10 +174,13 @@ class QTestClient:
         response_json = response.json()
         return response_json
 
-    def get_test_cases(self, project_id, test_case_id=None):
-        url = self.host + '/api/v3/projects/' + str(project_id) + '/test-cases'
+    def get_test_cases(self, project_id, test_case_id=None, page=1, size=20):
+        url = f"{self.host}/api/v3/projects/{project_id}/test-cases"
         if test_case_id:
             url = url + '/' + str(test_case_id)
+        else:
+            url = f"{url}?page={page}&size={size}"
+
         response = requests.get(url=url, headers=self._gen_header_from_token())
         response_json = response.json()
         return response_json
@@ -180,6 +198,17 @@ class QTestClient:
         [copy_property(allowed_property) for allowed_property in allowed_properties]
 
         response = requests.put(url=url, headers=self._gen_header_from_token(), json=reduced_test_case)
+        response_json = response.json()
+        return response_json
+    
+    def get_requirements(self, project_id, req_id=None, page=1, size=20):
+        url = f"{self.host}/api/v3/projects/{project_id}/requirements"
+        if req_id:
+            url = url + '/' + str(req_id)
+        else:
+            url = f"{url}?page={page}&size={size}"
+
+        response = requests.get(url=url, headers=self._gen_header_from_token())
         response_json = response.json()
         return response_json
 
@@ -230,5 +259,19 @@ class QTestClient:
         url = self.host + '/api/v3/projects/' + str(project_id) + '/settings/' + str(
             object_type) + '/custom-fields/active'
         response = requests.post(url=url, headers=self._gen_header_from_token(), json=fields)
+        response_json = response.json()
+        return response_json
+
+    def get_linked_objects(self, project_id, object_type, ids=[]):
+        url = f"{self.host}/api/v3/projects/{project_id}/linked-artifacts?type={object_type}"
+        if ids:
+            url = url + '&ids=' + "&ids=".join(map(str,ids))
+        response = requests.get(url=url, headers=self._gen_header_from_token())
+        response_json = response.json()
+        return response_json
+
+    def create_link(self, project_id, source_type, source_id, destination_type, dest_ids=[]):
+        url = f"{self.host}/api/v3/projects/{project_id}/{source_type}/{source_id}/link?type={destination_type}"
+        response = requests.post(url=url, json=dest_ids, headers=self._gen_header_from_token())
         response_json = response.json()
         return response_json

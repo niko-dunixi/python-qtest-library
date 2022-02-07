@@ -5,10 +5,11 @@ from distutils.core import setup
 
 setup(
     name='qasymphony-qtest-library',
-    version='0.2.1',
+    version='0.2.2',
     packages=['qtest'],
     license='ISC',
     long_description=open('README.md').read(),
+    long_description_content_type = 'text/markdown',
     install_requires=[
         'requests>=2.18.4',
     ],
